@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from City import City
 from Operations import initialPopulation, nextGeneration, rankRoutes
 from Fitness import Fitness
-from Helpers import getCityBasedOnNr, cityNumbersRoute1
+from Helpers import getCityBasedOnNr
 import random
 # from Helpersi
 
@@ -111,6 +111,10 @@ for i in range(1,26):
     cityList.append(City(nr= i, traffic=int(random.random()*40), x=int(random.random() * 200), y=int(random.random() * 200)))
     
 print(cityList)
+
+# Provide special initial solutions
+cityNumbersRoute1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+
 
 route1 = []
 for nr in cityNumbersRoute1:
