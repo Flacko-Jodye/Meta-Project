@@ -25,9 +25,9 @@ def plotRoute(cityList, title, filename):
     plt.ylabel('Y-Koordinate')
     plt.xlabel('X-Koordinate')
     plt.title(title)
-    # plt.show()   
-    plt.savefig(os.path.join(output_dir, filename))
-    plt.close()
+    plt.show()   
+    # plt.savefig(os.path.join(output_dir, filename))
+    # plt.close()
 
 
 
@@ -42,9 +42,9 @@ def plotPopulationAndObjectiveValues(population,title, filename):
     plt.ylabel('Stress')
     plt.xlabel('Distance')
     plt.title(title)
-    # plt.show()
-    plt.savefig(os.path.join(output_dir, filename))
-    plt.close()
+    plt.show()
+    # plt.savefig(os.path.join(output_dir, filename))
+    # plt.close()
 
 
 def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations):
@@ -142,7 +142,7 @@ initialSolutionsList = []
 
 
 
-# Parameter Tunin
+# Parameter Tuning
 popSizes = [50, 100, 200]
 eliteSizes = [10, 20, 30]
 mutationRates = [0.01, 0.05, 0.1]
