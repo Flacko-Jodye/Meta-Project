@@ -15,6 +15,8 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
     print("Initial distance : " + str(Fitness(bestRoute).routeDistance()))
     print("Initial stress:    " + str(Fitness(bestRoute).routeStress()))
     
+    if config.plotting_enabled:
+        plotRoute(bestRoute, "Initial Route", f"Initial_Route_{popSize}_{eliteSize}_{mutationRate}_{generations}.png")
     #plot initial population with regard to the two objectives
     if config.plotting_enabled:
         plotPopulationAndObjectiveValues(pop, "Initial Population", f"Initial_Population_{popSize}_{eliteSize}_{mutationRate}_{generations}.png", Fitness)

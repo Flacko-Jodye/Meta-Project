@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import os
+from scipy.ndimage import uniform_filter1d
 
 output_dir = "Visualisation_Parameters"
 if not os.path.exists(output_dir):
@@ -33,11 +35,21 @@ def plotPopulationAndObjectiveValues(population, title, filename, Fitness):
     plt.savefig(os.path.join(output_dir, filename))
     plt.close()
 
-def plotProgress(data, ylabel, title, filename):
+def plotProgress(data, ylabel, title, filename, window_size = 50):
     plt.figure()
-    plt.plot(data)
+    plt.plot(data, label = ylabel, color = "lightblue")
+
+    # Glatte Trendlinie
+    smooth_data = uniform_filter1d(data, size=window_size)
+    plt.plot(smooth_data, label = "Trend", color = "red", alpha = 0.4)
+
+    # Beste Fitness-Linie
+    best_fitness = [min(data[:i + 1]) for i in range(len(data))]
+    plt.plot(best_fitness, label = "Beste Fitness", color = "purple", alpha = 0.4)
+
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
+    plt.legend()
     plt.title(title)
     plt.savefig(os.path.join(output_dir, filename))
     plt.close()

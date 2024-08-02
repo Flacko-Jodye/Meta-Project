@@ -7,6 +7,7 @@ from plotting import plotPopulationAndObjectiveValues, plotProgress, plotRoute
 from genetic_algorithm import geneticAlgorithm
 import random, os, csv, config
 
+
 #Create list of cities
 cityList = []
 random.seed(44)
@@ -91,6 +92,7 @@ def run_experiments(): # Tuning-Modus
                         best_progress_stress = progressStress
                         best_final_population = final_population
                         best_params = (popSize, eliteSize, mutationRate, generations)
+                    print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_stress}:")
         if config.csv_enabled:
             save_results_to_csv(results, results_file)
 
@@ -113,7 +115,7 @@ def run_experiments(): # Tuning-Modus
         print(f"Generations: {best_params[3]}")
         print(f"Final Distance: {best_overall_distance}")
 
-def run_sinle_experiment(): # Single-Experiment-Modus
+def run_single_experiment(): # Single-Experiment-Modus
     params = config.single_run_params
     print(f"Algo läuft mit folgenden Parametern: {params}")
     bestRoute, progressDistance, progressStress, final_population = geneticAlgorithm(
@@ -138,9 +140,10 @@ def run_sinle_experiment(): # Single-Experiment-Modus
         print(f"Mutationsrate: {params['mutationRate']}")
         print(f"Generationen: {params['generations']}")
         print(f"Beste Distanz: {1 / rankRoutes([bestRoute], 1)[0][1]}")
+        print(f"Minimaler Stress: {1 / rankRoutes([bestRoute], 2)[0][1]}")
 
 if __name__ == "__main__":
     if config.tuning_mode:
         run_experiments()
     else:
-        run_sinle_experiment()
+        run_single_experiment()
