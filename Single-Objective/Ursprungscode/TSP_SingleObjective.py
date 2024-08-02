@@ -366,13 +366,13 @@ for nr in cityNumbersRoute1:
 
 initialSolutionsList = []
 #TODO: Spezielle Intiallösungen der initialSolutionsList übergeben    
- initialSolutionsList.append(route1)
+initialSolutionsList.append(route1)
 
 #Run the genetic algorithm
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
 #modify objectiveNrUsed to use different objectives:
 # 1= Minimize distance, 2 = Minimize stress
-bestRoute = geneticAlgorithm(objectiveNrUsed=1, specialInitialSolutions = initialSolutionsList, population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
+bestRoute = geneticAlgorithm(objectiveNrUsed=1, specialInitialSolutions = initialSolutionsList, population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=100)
 print(bestRoute)
 
 plotRoute(bestRoute, "Best final route")
