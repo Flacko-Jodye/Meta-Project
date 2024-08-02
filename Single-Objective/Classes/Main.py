@@ -5,10 +5,7 @@ from Fitness import Fitness
 from Helpers import getCityBasedOnNr
 from plotting import plotPopulationAndObjectiveValues, plotProgress, plotRoute
 from genetic_algorithm import geneticAlgorithm
-import random
-import os
-import csv 
-import config
+import random, os, csv, config
 
 #Create list of cities
 cityList = []
