@@ -17,6 +17,7 @@ def initialPopulation(popSize, cityList, specialInitialSolutions):
     population = []
     
     #TODO: Hinzufügen der speziellen Initiallösungen aus specialInitialSolutions
+    population.extend(specialInitialSolutions)
     
     numberInitialSolutions = len(specialInitialSolutions)
     print ("Number of special initial solutions:" + str(numberInitialSolutions))
