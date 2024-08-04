@@ -21,7 +21,7 @@ def initialPopulation(popSize, cityList, specialInitialSolutions):
     numberInitialSolutions = len(specialInitialSolutions)
     print ("Number of special initial solutions:" + str(numberInitialSolutions))
 
-    for i in range(0, popSize): #TODO gegebenenfalls anpassen, falls bereits Initiallösungen hinzugefügt
+    for i in range(numberInitialSolutions, popSize): #TODO gegebenenfalls anpassen, falls bereits Initiallösungen hinzugefügt
         population.append(createRoute(cityList))
     return population
 
