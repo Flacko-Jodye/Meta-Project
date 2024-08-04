@@ -77,7 +77,7 @@ route2 = createGreedyRoute(cityList, startCityNr, objective)
 
 initialSolutionsList = []
 #TODO: Spezielle Intiallösungen der initialSolutionsList übergeben    
-initialSolutionsList.append(route2)    
+initialSolutionsList.append(route1)    
 #Run the genetic algorithm
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
 #modify objectiveNrUsed to use different objectives:

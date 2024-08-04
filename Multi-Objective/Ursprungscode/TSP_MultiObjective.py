@@ -11,6 +11,10 @@ Modified for multicriteria TSP
 
 
 import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt
+import runpy
+import sys
+import os
+import subprocess
 
 #Create necessary classes and functions
 #Create class to handle "cities
@@ -109,7 +113,7 @@ def initialPopulation(popSize, cityList, specialInitialSolutions):
     population = []
     
     #TODO: Hinzufügen der speziellen Initiallösungen aus specialInitialSolutions
-    
+    population.extend(specialInitialSolutions)
 
     numberInitialSolutions = len(specialInitialSolutions)
     print ("Number of special initial solutions:" + str(numberInitialSolutions))
@@ -522,7 +526,65 @@ for nr in cityNumbersRoute1:
 
 initialSolutionsList = []
 #TODO: Spezielle Intiallösungen der initialSolutionsList übergeben
+def findNearestCity(currentCity, remainingCities, objective=1):
+    """
+    Finds the nearest city based on the given objective.
+    :param currentCity: The current city object.
+    :param remainingCities: List of remaining city objects.
+    :param objective: 1 for distance, 2 for stress.
+    :return: The nearest city object based on the selected metric.
+    """
+    nearestCity = None
+    minMetric = float('inf')
     
+    for city in remainingCities:
+        if objective == 1:  # Minimierung der Distanz
+            metric = currentCity.distance(city)
+        elif objective == 2:  # Minimierung des Stresses
+            metric = currentCity.stress(city)
+        
+        if metric < minMetric:
+            minMetric = metric
+            nearestCity = city
+            
+    return nearestCity
+
+def createGreedyRoute(cityList, startCityNr, objective=1):
+    """
+    Creates a route using a greedy algorithm based on the specified objective.
+    :param cityList: List of all city objects.
+    :param startCityNr: The starting city's number.
+    :param objective: 1 for minimizing distance, 2 for minimizing stress.
+    :return: A list representing the route.
+    """
+    remainingCities = cityList[:]
+    startCity = getCityBasedOnNr(remainingCities, startCityNr)
+    route = [startCity]
+    remainingCities.remove(startCity)
+    
+    currentCity = startCity
+    while remainingCities:
+        nextCity = findNearestCity(currentCity, remainingCities, objective)
+        route.append(nextCity)
+        remainingCities.remove(nextCity)
+        currentCity = nextCity
+    
+    return route
+
+
+
+# Define the start city and objective
+startCityNr = 1 # Starting with city number 1
+objective = 1    # 1 = Minimize distance, 2 = Minimize stress
+sys.path.append(os.path.abspath("Single-Objective/Classes"))
+path = "Single-Objective/Classes/Main.py"
+
+# Generate the special initial route based on the chosen objective
+route2 = createGreedyRoute(cityList, startCityNr, objective)
+route3 = subprocess.run(["python", path])
+
+initialSolutionsList.append(route2)
+   
 #Run the genetic algorithm
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
 #modify objectiveNrUsed to use different objectives:
