@@ -8,7 +8,7 @@ csv_enabled = False
 tuning_mode = False
 
 # Auswahl der Selektionsmethodik: "roulette", "rank", "steady_state" oder "tournament"
-selection_method = "tournament"
+selection_method = "roulette"
 tournament_size = 5             # Nur für Turnierselektion relevant
 replace_size = 2                # Nur für steady_state Selektion relevant
 
@@ -22,7 +22,7 @@ single_run_params = {
     }
 
 # Einstellen der Parameter für den Tuning-Modus
-popSizes = [50, 100, 200]
+popSizes = [50, 100, 200, 300]
 eliteSizes = [10, 20, 30]
-mutationRates = [0.01, 0.05, 0.1]
+mutationRates = [0.01, 0.02, 0.05, 0.1]
 generations_list = [100, 200, 500]

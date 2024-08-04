@@ -75,7 +75,7 @@ def rouletteWheelSelection(popRanked, eliteSize):
 
 def tournamentSelection(popRanked, eliteSize, tournamentSize): # https://www.geeksforgeeks.org/tournament-selection-ga/  &&& https://gist.github.com/marinhoarthur/6689655 -> Ergänzung um Elite
     selectionResults = []
-    for i in range(0, eliteSize): # Elite wird beibehalten --> Sicherstellung der besten Lösungen / Beschleunigte Konvergenz
+    for i in range(0, eliteSize): # Elite wird beibehalten
         selectionResults.append(popRanked[i][0])
     # Turnier mit restlichen Individuen
     for i in range(0, len(popRanked) - eliteSize):
@@ -90,10 +90,8 @@ def rankBasedSelection(popRanked, eliteSize):                  # https://setu677
     df["rank"] = df.Fitness.rank(ascending=False)
     df['cum_sum'] = df["rank"].cumsum()             
     df['cum_perc'] = 100 * df.cum_sum/df["rank"].sum()
-    #We’ll also want to hold on to our best routes, so we introduce elitism
     for i in range(0, eliteSize): # Elite wird beibehalten
         selectionResults.append(popRanked[i][0])
-    #we compare a randomly drawn number to these weights to select our mating pool
     for i in range(0, len(popRanked) - eliteSize):
         pick = 100 *random.random()
         for j in range(0, len(popRanked)):
