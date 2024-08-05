@@ -3,7 +3,7 @@
 # csv_enabled = True         # Auf True setzen um die Ergebnisse in einer CSV-Datei zu speichern
 # tuning_mode = False        # Auf True setzen um den Tuning-Modus zu aktivieren --> Parameter-Set in Main.py
 
-plotting_enabled = True
+plotting_enabled = False
 csv_enabled = False
 tuning_mode = False
 

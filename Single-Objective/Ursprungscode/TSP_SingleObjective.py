@@ -11,6 +11,8 @@ Modified for multicriteria TSP
 
 
 import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt
+import csv
+import os
 
 #Create necessary classes and functions
 #Create class to handle "cities
@@ -407,7 +409,25 @@ def createGreedyRoute(cityList, startCityNr, objective=1):
     
     return route
 
+# Funktion zum Speichern der besten Route in einer CSV-Datei
+def save_best_route_to_csv(route, filename):
+    """
+    Speichert die beste Route in einer CSV-Datei.
+    :param route: Liste von City-Objekten.
+    :param filename: Name der CSV-Datei.
+    """
+    # Extrahieren der Stadt-Indizes
+    route_indices = [city.nr for city in route]
 
+    # Erstellen des Pfades zur Speicherung
+    file_path = os.path.join('Visualisation_Parameters', filename)
+
+    # Schreiben der Stadt-Indizes in eine CSV-Datei
+    with open(file_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['City_Index'])  # Header
+        for index in route_indices:
+            writer.writerow([index])
 
 # Define the start city and objective
 startCityNr = 1 # Starting with city number 1
@@ -418,7 +438,8 @@ route2 = createGreedyRoute(cityList, startCityNr, objective)
 
 initialSolutionsList = []
 #TODO: Spezielle Intiallösungen der initialSolutionsList übergeben    
-initialSolutionsList.append(route2)
+initialSolutionsList.append(route1)
+
 
 
 #Run the genetic algorithm
@@ -427,5 +448,8 @@ initialSolutionsList.append(route2)
 # 1= Minimize distance, 2 = Minimize stress
 bestRoute = geneticAlgorithm(objectiveNrUsed=1, specialInitialSolutions = initialSolutionsList, population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=100)
 print(bestRoute) 
+
+save_best_route_to_csv(bestRoute, 'Best_Route.csv')
+
 
 plotRoute(bestRoute, "Best final route")
