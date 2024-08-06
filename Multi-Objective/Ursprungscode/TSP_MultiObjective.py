@@ -15,6 +15,7 @@ import runpy
 import sys
 import os
 import subprocess
+import csv
 
 #Create necessary classes and functions
 #Create class to handle "cities
@@ -581,9 +582,38 @@ path = "Single-Objective/Classes/Main.py"
 
 # Generate the special initial route based on the chosen objective
 route2 = createGreedyRoute(cityList, startCityNr, objective)
-route3 = subprocess.run(["python", path])
+
+# Funktion zum Laden der besten Route aus einer CSV-Datei
+def load_best_route_from_csv(filename, cityList):
+    """
+    Lädt die beste Route aus einer CSV-Datei und konvertiert sie zurück in eine Liste von City-Objekten.
+    :param filename: Name der CSV-Datei.
+    :param cityList: Liste aller City-Objekte.
+    :return: Liste der City-Objekte entsprechend der gespeicherten Reihenfolge.
+    """
+    route_indices = []
+    with open(filename, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # Überspringen des Headers
+        for row in reader:
+            route_indices.append(int(row[0]))
+
+    # Konvertieren der Indizes zurück in City-Objekte
+    route = [getCityBasedOnNr(cityList, nr) for nr in route_indices]
+    return route
+
+# Beispiel: Laden der besten Route
+cityList = [...]  # Die Stadtliste muss wie zuvor erstellt werden
+# best_route_loaded = load_best_route_from_csv('Visualisation_Parameters/Best_Route.csv', cityList)
+
+#print("Geladene Route:", best_route_loaded)
+
+#route3 = best_route_loaded
 
 initialSolutionsList.append(route2)
+
+# Debug-Ausgabe zur Überprüfung der initialSolutionsList
+print("Initial Solutions List:", initialSolutionsList)
    
 #Run the genetic algorithm
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
