@@ -604,13 +604,13 @@ def load_best_route_from_csv(filename, cityList):
 
 # Beispiel: Laden der besten Route
 cityList = [...]  # Die Stadtliste muss wie zuvor erstellt werden
-# best_route_loaded = load_best_route_from_csv('Visualisation_Parameters/Best_Route.csv', cityList)
+best_route_loaded = load_best_route_from_csv('Visualisation_Parameters/Best_Route.csv', cityList)
 
-#print("Geladene Route:", best_route_loaded)
+print("Geladene Route:", best_route_loaded)
 
-#route3 = best_route_loaded
+route3 = best_route_loaded
 
-initialSolutionsList.append(route2)
+initialSolutionsList.append(route3)
 
 # Debug-Ausgabe zur Überprüfung der initialSolutionsList
 print("Initial Solutions List:", initialSolutionsList)

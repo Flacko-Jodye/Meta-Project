@@ -425,7 +425,7 @@ def save_best_route_to_csv(route, filename):
     # Schreiben der Stadt-Indizes in eine CSV-Datei
     with open(file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['City_Index'])  # Header
+        writer.writerow(['CityNr'])  # Header
         for index in route_indices:
             writer.writerow([index])
 
