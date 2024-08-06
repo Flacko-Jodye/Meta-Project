@@ -416,8 +416,6 @@ def save_best_route_to_csv(route, filename):
     :param route: Liste von City-Objekten.
     :param filename: Name der CSV-Datei.
     """
-    # Extrahieren der Stadt-Indizes
-    route_indices = [city.nr for city in route]
 
     # Erstellen des Pfades zur Speicherung
     file_path = os.path.join('Visualisation_Parameters', filename)
@@ -425,9 +423,11 @@ def save_best_route_to_csv(route, filename):
     # Schreiben der Stadt-Indizes in eine CSV-Datei
     with open(file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['CityNr'])  # Header
-        for index in route_indices:
-            writer.writerow([index])
+        # Schreiben des Headers
+        writer.writerow(['CityNr', 'traffic', 'x', 'y'])  # Passen Sie dies an die Attribute der City-Klasse an
+        # Schreiben der Daten für jede Stadt
+        for city in route:
+            writer.writerow([city.nr, city.traffic, city.x, city.y])
 
 # Define the start city and objective
 startCityNr = 1 # Starting with city number 1

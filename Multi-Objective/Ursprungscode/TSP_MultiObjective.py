@@ -584,32 +584,57 @@ path = "Single-Objective/Classes/Main.py"
 route2 = createGreedyRoute(cityList, startCityNr, objective)
 
 # Funktion zum Laden der besten Route aus einer CSV-Datei
-def load_best_route_from_csv(filename, cityList):
-    """
-    Lädt die beste Route aus einer CSV-Datei und konvertiert sie zurück in eine Liste von City-Objekten.
-    :param filename: Name der CSV-Datei.
-    :param cityList: Liste aller City-Objekte.
-    :return: Liste der City-Objekte entsprechend der gespeicherten Reihenfolge.
-    """
-    route_indices = []
-    with open(filename, 'r') as csvfile:
-        reader = csv.reader(csvfile)
-        next(reader)  # Überspringen des Headers
-        for row in reader:
-            route_indices.append(int(row[0]))
+# def load_best_route_from_csv(filename, cityList):
+#     """
+#     Lädt die beste Route aus einer CSV-Datei und konvertiert sie zurück in eine Liste von City-Objekten.
+#     :param filename: Name der CSV-Datei.
+#     :param cityList: Liste aller City-Objekte.
+#     :return: Liste der City-Objekte entsprechend der gespeicherten Reihenfolge.
+#     """
+#     route_indices = []
+#     with open(filename, 'r') as csvfile:
+#         reader = csv.reader(csvfile)
+#         next(reader)  # Überspringen des Headers
+#         for row in reader:
+#             route_indices.append(int(row[0]))
 
-    # Konvertieren der Indizes zurück in City-Objekte
-    route = [getCityBasedOnNr(cityList, nr) for nr in route_indices]
-    return route
+#     # Konvertieren der Indizes zurück in City-Objekte
+#     route = [getCityBasedOnNr(cityList, nr) for nr in route_indices]
+#     return route
 
 # Beispiel: Laden der besten Route
-cityList = [...]  # Die Stadtliste muss wie zuvor erstellt werden
-best_route_loaded = load_best_route_from_csv('Visualisation_Parameters/Best_Route.csv', cityList)
+# cityList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]  # Die Stadtliste muss wie zuvor erstellt werden
+#best_route_loaded = load_best_route_from_csv('Visualisation_Parameters/Best_Route.csv', cityList)
 
-print("Geladene Route:", best_route_loaded)
+#print("Geladene Route:", best_route_loaded)
 
-route3 = best_route_loaded
+def create_city_list_from_csv(filename):
+    city_list = []
+    with open(filename, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # Überspringen des Headers, falls vorhanden
+        for row in reader:
+            if len(row) < 4:
+                print(f"Skipping incomplete row: {row}")
+                continue
+            try:
+                nr = int(row[0])
+                traffic = int(row[1])
+                x = int(row[2])
+                y = int(row[3])
+                city = City(nr, traffic, x, y)
+                city_list.append(city)
+            except ValueError as e:
+                print(f"Skipping row due to conversion error: {row}, Error: {e}")
+                continue
+    return city_list
 
+# Beispiel: Erstellen der cityList aus der CSV-Datei
+filename = 'Visualisation_Parameters/Best_Route.csv'
+cityList = create_city_list_from_csv(filename)
+
+print("City List:", cityList)
+route3 = cityList
 initialSolutionsList.append(route3)
 
 # Debug-Ausgabe zur Überprüfung der initialSolutionsList
