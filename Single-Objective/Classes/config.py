@@ -3,7 +3,7 @@
 # csv_enabled = True         # Auf True setzen um die Ergebnisse in einer CSV-Datei zu speichern
 # tuning_mode = False        # Auf True setzen um den Tuning-Modus zu aktivieren --> Parameter-Set in Main.py
 
-plotting_enabled = True
+plotting_enabled = False
 csv_enabled = False
 tuning_mode = False
 
@@ -18,7 +18,7 @@ single_run_params = {
     "eliteSize": 20,       
     "mutationRate": 0.01,
     "generations": 500,
-    "objectiveNrUsed": 1  # 1 = Distanz minimieren, 2 = Stress minimieren
+    "objectiveNrUsed": 2  # 1 = Distanz minimieren, 2 = Stress minimieren
     }
 
 # Einstellen der Parameter für den Tuning-Modus

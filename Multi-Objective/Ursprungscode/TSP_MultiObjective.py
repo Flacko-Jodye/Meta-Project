@@ -107,7 +107,7 @@ def createRoute(cityList):
 #Create first "population" (list of routes)
 def initialPopulation(popSize, cityList, specialInitialSolutions):
     population = []
-    
+    population.extend(specialInitialSolutions)
     #TODO: Hinzufügen der speziellen Initiallösungen aus specialInitialSolutions
     
 
@@ -133,7 +133,7 @@ def rankRoutes(population, objectiveNrUsed):
             fitnessResults[i] = Fitness(population[i]).routeFitnessStressBased()
     elif (objectiveNrUsed == 3):
         #TODO: passender Aufruf der bestehenden Fitnessberechnung 
-        print("Here is something missing")
+        fitnessResults = rankRoutesBasedOnDominance(population) # hinzugefügt
     return sorted(fitnessResults.items(), key = operator.itemgetter(1), reverse = True)
 
 #Provide Pareto-Based Fitness Calculation <<<<<<<<<<<<
@@ -520,14 +520,14 @@ for nr in cityNumbersRoute1:
     route1.append(getCityBasedOnNr(cityList,nr))
     
 
-initialSolutionsList = []
+initialSolutionsList = [route1]
 #TODO: Spezielle Intiallösungen der initialSolutionsList übergeben
     
 #Run the genetic algorithm
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
 #modify objectiveNrUsed to use different objectives:
 # 1= Minimize distance, 2 = Minimize stress, 3 = MinimizeBoth
-bestRoute = geneticAlgorithm(objectiveNrUsed=1, specialInitialSolutions = initialSolutionsList, population=cityList,
+bestRoute = geneticAlgorithm(objectiveNrUsed=3, specialInitialSolutions = initialSolutionsList, population=cityList,
                              popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
 #print(bestRoute)
 

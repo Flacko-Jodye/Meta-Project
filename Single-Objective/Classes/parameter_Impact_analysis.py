@@ -22,7 +22,9 @@ def run_parameter_impact_analysis():
     for i in range(1, 26):
         cityList.append(City(nr=i, traffic=int(random.random() * 40), x=int(random.random() * 200), y=int(random.random() * 200)))
 
-    initialSolutionsList = []
+    # Definieren Sie einige Beispiel-Initiallösungen (stellen Sie sicher, dass sie realistisch sind)
+    initialSolutionsList = [[cityList[i] for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]], 
+                            [cityList[i] for i in [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]]]
 
     progress_distances = { 'popSize': [], 'eliteSize': [], 'mutationRate': [], 'generations': [] }
     progress_stresses = { 'popSize': [], 'eliteSize': [], 'mutationRate': [], 'generations': [] }
