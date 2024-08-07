@@ -5,6 +5,7 @@ import random
 #This means that, with specified low probability, 
 #two cities will swap places in our route.
 def mutate(individual, mutationRate):
+    random.seed(44)
     for swapped in range(len(individual)):
         if(random.random() < mutationRate):
             swapWith = int(random.random() * len(individual))
@@ -16,8 +17,12 @@ def mutate(individual, mutationRate):
             individual[swapWith] = city1
     return individual
 
+
+"Reverse Sequence und Partial Shuffle Mutation einbauen"     
+
 #Create function to run mutation over entire population
 def mutatePopulation(population, mutationRate, eliteSize):
+    random.seed(44)
     mutatedPop = []
     
     #mating pool is sorted in order of fitness

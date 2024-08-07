@@ -1,4 +1,5 @@
 import numpy as np
+from Fitness import Fitness, isSameSolution
 
 def determineNonDominatedArchive(currentGen, popRanked):
     archive = []

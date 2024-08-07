@@ -1,4 +1,8 @@
 import matplotlib.pyplot as plt
+from Fitness import Fitness
+import os 
+from config import plotting_enabled, output_directory, saving_enabled
+
 
 def plotPopulationAndObjectiveValues(population,title):
     distance = []
@@ -10,7 +14,13 @@ def plotPopulationAndObjectiveValues(population,title):
     plt.ylabel('Stress')
     plt.xlabel('Distance')
     plt.title(title)
-    plt.show()
+    if saving_enabled:
+        save_path = os.path.join(output_directory, f"{title.replace(' ', '_')}.png")
+        os.makedirs(output_directory, exist_ok=True)
+        plt.savefig(save_path)
+    if plotting_enabled:
+        plt.show()
+    plt.clf()
 
 def plotRoute(cityList, title):
     x = []
@@ -25,14 +35,33 @@ def plotRoute(cityList, title):
     plt.ylabel('Y-Coordinate')
     plt.xlabel('X-Coordinate')
     plt.title(title)
-    plt.show()   
+    if saving_enabled:
+        save_path = os.path.join(output_directory, f"{title.replace(' ', '_')}.png")
+        os.makedirs(output_directory, exist_ok=True)
+        plt.savefig(save_path)
+    if plotting_enabled:
+        plt.show()
+    plt.clf()
 
 def plotProgress(progress, ylabel, title):
     plt.plot(progress)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
     plt.title(title)
-    plt.show()
+    if saving_enabled:
+        save_path = os.path.join(output_directory, f"{title.replace(' ', '_')}.png")
+        os.makedirs(output_directory, exist_ok=True)
+        plt.savefig(save_path)
+    if plotting_enabled:
+        plt.show()
+    plt.clf()
+
+# def plotProgress(progress, ylabel, title):
+#     plt.plot(progress)
+#     plt.ylabel(ylabel)
+#     plt.xlabel('Generation')
+#     plt.title(title)
+#     plt.show()
 
 # def plotParameterImpact(parameter_name, parameter_values, progress_data, ylabel, title, filename_prefix):
 #     plt.figure()
