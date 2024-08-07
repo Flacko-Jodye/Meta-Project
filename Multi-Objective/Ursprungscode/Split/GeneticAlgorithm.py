@@ -1,7 +1,8 @@
 import random, numpy as np, pandas as np, matplotlib.pyplot as plt
 from Fitness import Fitness
-from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory
+from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory, crossover_method, mutation_method
 from Mutation import mutate, mutatePopulation
+from Crossover import ordered_crossover, one_point_crossover, edge_recombination_crossover
 from Selection import selection, selectionWithArchive
 from Archive import determineNonDominatedArchiveSize, determineNonDominatedArchive
 from InitialPopulation import createRoute, initialPopulation
@@ -21,27 +22,15 @@ def matingPool(population, selectionResults):
 
 # Create a crossover function for two parents to create one child
 def breed(parent1, parent2):
-    child = []
-    childP1 = []
-    childP2 = []
-    
-    geneA = int(random.random() * len(parent1))
-    geneB = int(random.random() * len(parent1))
-    
-    startGene = min(geneA, geneB)
-    endGene = max(geneA, geneB)
 
-    #In ordered crossover, we randomly select a subset of the first parent string
-    for i in range(startGene, endGene):
-        childP1.append(parent1[i])
-
-    #and then fill the remainder of the route with the genes from the second parent
-    #in the order in which they appear, 
-    #without duplicating any genes in the selected subset from the first parent      
-    childP2 = [item for item in parent2 if item not in childP1]
-
-    child = childP1 + childP2
-    return child
+    if crossover_method == "order":
+        return ordered_crossover(parent1, parent2)
+    elif crossover_method == "one-point":
+        return one_point_crossover(parent1, parent2)
+    elif crossover_method == "edge-recombination":
+        return edge_recombination_crossover(parent1, parent2)
+    else:
+        raise ValueError("Unknown crossover method: {}".format(crossover_method))
 
 #Create function to run crossover over full mating pool
 def breedPopulation(matingpool, eliteSize):
@@ -67,9 +56,7 @@ def breedPopulation(matingpool, eliteSize):
 #Finally, we then create our new generation using the breedPopulation function 
 # and then applying mutation using the mutatePopulation function. 
 
-def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archiveUsed, seed = 44): 
-    # random.seed(seed)
-   # rankRoutesBasedOnDominance(currentGen)
+def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archiveUsed, seed = 44):
     popRanked = rankRoutes(currentGen,objectiveNrUsed)
     if (not archiveUsed):
         selectionResults = selection(popRanked, eliteSize)
@@ -88,7 +75,6 @@ def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archive
     return nextGeneration
 
 def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations, seed = 44):
-    # random.seed(seed)
     #create initial population
     pop = initialPopulation(popSize, population, specialInitialSolutions)
     

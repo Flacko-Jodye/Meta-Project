@@ -2,8 +2,8 @@ import random
 from City import City
 from GeneticAlgorithm import geneticAlgorithm
 from Helpers import getCityBasedOnNr
-from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory
-from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress
+from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method
+from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress, plotParetoFront
 from RankRoutes import rankRoutes
 from Helpers import save_results_to_csv
 
@@ -11,6 +11,9 @@ def print_current_config():
     print("Current configuration:")
     for key, value in single_run_params.items():
         print(f"{key}: {value}")
+    print(f"Selection Method: {selection_method}")
+    print(f"Crossover Method: {crossover_method}")
+    print(f"Mutation Method: {mutation_method}")
 
 random.seed(44)
 cityList = []
@@ -45,6 +48,7 @@ def run_single_experiment():
         plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
         plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')
         plotPopulationAndObjectiveValues(final_population, "Final Population")
+        plotParetoFront(final_population, "Pareto Front")
 
     print("\nBeste Parameter und Ergebnisse:")
     print(f"PopSize: {params['popSize']}")
@@ -113,6 +117,7 @@ def run_experiements(): # Tuning-Modus
         plotProgress(best_progress_distance, 'Distance', 'Progress of Distance Minimization')
         plotProgress(best_progress_stress, 'Stress', 'Progress of Stress Minimization')
         plotPopulationAndObjectiveValues(best_final_population, "Final Population")
+        plotParetoFront(best_final_population, "Pareto Front")
 
     if best_params is not None:
         print("\nBeste Parameter und Ergebnisse: ")

@@ -1,11 +1,11 @@
 import random
+from config import mutation_method
 
 #Create function to mutate a single route
 #we’ll use swap mutation.
 #This means that, with specified low probability, 
 #two cities will swap places in our route.
-def mutate(individual, mutationRate):
-    # random.seed(44)
+def swap_mutate(individual, mutationRate):
     for swapped in range(len(individual)):
         if(random.random() < mutationRate):
             swapWith = int(random.random() * len(individual))
@@ -18,7 +18,23 @@ def mutate(individual, mutationRate):
     return individual
 
 
-"Reverse Sequence und Partial Shuffle Mutation einbauen"     
+"Reverse Sequence und Partial Shuffle Mutation einbauen"   
+
+def inversion_mutation(individual, mutation_rate):
+    if random.random() < mutation_rate:
+        # 2 Indizes zufällig auswählen
+        index1, index2 = sorted(random.sample(range(len(individual)), 2))
+        # Invertieren der Reihenfolge innerhalb des Intervalls
+        individual[index1:index2] = reversed(individual[index1:index2])
+    return individual
+
+def mutate(individual, mutation_rate):
+    if mutation_method == "swap":
+        return swap_mutate(individual, mutation_rate)
+    elif mutation_method == "inversion":
+        return inversion_mutation(individual, mutation_rate)
+    else:
+        raise ValueError("Unknown mutation method: {}".format(mutation_method))
 
 #Create function to run mutation over entire population
 def mutatePopulation(population, mutationRate, eliteSize):
