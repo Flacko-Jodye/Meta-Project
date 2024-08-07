@@ -10,7 +10,7 @@ from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress
 import os
 
 
-# random.seed(44)
+random.seed(44)
 #Create mating pool
 def matingPool(population, selectionResults):
     matingpool = []
@@ -67,7 +67,8 @@ def breedPopulation(matingpool, eliteSize):
 #Finally, we then create our new generation using the breedPopulation function 
 # and then applying mutation using the mutatePopulation function. 
 
-def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archiveUsed): 
+def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archiveUsed, seed = 44): 
+    # random.seed(seed)
    # rankRoutesBasedOnDominance(currentGen)
     popRanked = rankRoutes(currentGen,objectiveNrUsed)
     if (not archiveUsed):
@@ -86,7 +87,8 @@ def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archive
         nextGeneration = mutatePopulation(children, mutationRate, eliteSize)
     return nextGeneration
 
-def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations):
+def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations, seed = 44):
+    # random.seed(seed)
     #create initial population
     pop = initialPopulation(popSize, population, specialInitialSolutions)
     
@@ -127,32 +129,7 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         progressDistance.append(1 / rankRoutes(pop,1)[0][1])
         progressStress.append(1 / rankRoutes(pop,2)[0][1])
     print("Done!")
-        
-    # #plot progress - distance
-    # plt.plot(progressDistance)
-    # plt.ylabel('Distance')
-    # plt.xlabel('Generation')
-    # plt.title('Progress of Distance Minimization')
-    # if saving_enabled:
-    #     save_path = os.path.join(output_directory, "Progress_of_Distance_Minimization.png")
-    #     os.makedirs(output_directory, exist_ok=True)
-    #     plt.savefig(save_path)
-    # if plotting_enabled:
-    #     plt.show()
-    # plt.clf()
-    # #plot progress - stress
-    # plt.plot(progressStress)
-    # plt.ylabel('Stress')
-    # plt.xlabel('Generation')
-    # plt.title('Progress of Stress Minimization')
-    # if saving_enabled:
-    #     save_path = os.path.join(output_directory, "Progress_of_Stress_Minimization.png")
-    #     os.makedirs(output_directory, exist_ok=True)
-    #     plt.savefig(save_path)
-    # if plotting_enabled:
-    #     plt.show()
-    # plt.clf()
-    
+            
     if plotting_enabled:
         plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
         plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')

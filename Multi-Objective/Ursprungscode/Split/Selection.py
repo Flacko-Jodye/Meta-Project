@@ -2,6 +2,7 @@ import random, pandas as pd, numpy as np
 from config import selection_method, tournament_size, replace_size
 
 def selection(popRanked, eliteSize):
+    # random.seed(44)
     if selection_method == "roulette":
         return rouletteWheelSelection(popRanked, eliteSize)
     elif selection_method == "rank":
@@ -17,6 +18,7 @@ def selection(popRanked, eliteSize):
 
     
 def rouletteWheelSelection(popRanked, eliteSize):
+    # random.seed(44)
     selectionResults = []
     df = pd.DataFrame(np.array(popRanked), columns=["Index","Fitness"])
     df['cum_sum'] = df.Fitness.cumsum()
@@ -33,6 +35,7 @@ def rouletteWheelSelection(popRanked, eliteSize):
     return selectionResults
 
 def tournamentSelection(popRanked, eliteSize, tournamentSize):
+    random.seed(44)
     selectionResults = []
     for i in range(0, eliteSize):
         selectionResults.append(popRanked[i][0])
@@ -43,6 +46,7 @@ def tournamentSelection(popRanked, eliteSize, tournamentSize):
     return selectionResults
 
 def rankBasedSelection(popRanked, eliteSize):
+    random.seed(44)
     selectionResults = []
     df = pd.DataFrame(np.array(popRanked), columns=["Index","Fitness"])
     df["rank"] = df.Fitness.rank(ascending=False)
@@ -59,6 +63,7 @@ def rankBasedSelection(popRanked, eliteSize):
     return selectionResults
 
 def steadyStateSelection(popRanked, eliteSize, replaceSize):
+    random.seed(44)
     selectionResults = []
     for i in range(eliteSize):
         selectionResults.append(popRanked[i][0])
@@ -68,6 +73,7 @@ def steadyStateSelection(popRanked, eliteSize, replaceSize):
     return selectionResults
 
 def selectionWithArchive(popRanked):
+    random.seed(44)
     selectionResults = []
     df = pd.DataFrame(np.array(popRanked), columns=["Index","Fitness"])
     df['cum_sum'] = df.Fitness.cumsum()

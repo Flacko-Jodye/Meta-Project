@@ -3,7 +3,7 @@ import os
 # Experiment configurations "Noch alle Modi ermöglichen"
 plotting_enabled = False
 saving_enabled = False
-csv_enabled = True
+csv_enabled = False
 tuning_mode = False                  # Noch anpassen, dass sowohl seleciton, mutation und rekombination getuned werden können
 
 # Selection method: "roulette", "rank", "steady_state", or "tournament"
@@ -26,10 +26,15 @@ single_run_params = {
 }
 
 # Parameters for tuning mode
-popSizes = [50, 100, 200, 300]
-eliteSizes = [10, 20, 30]
-mutationRates = [0.01, 0.02, 0.05, 0.1]
-generations_list = [100, 200, 500]
+# popSizes = [50, 100, 200, 300]
+# eliteSizes = [10, 20, 30]
+# mutationRates = [0.01, 0.02, 0.05, 0.1]
+# generations_list = [100, 200, 500]
+
+popSizes = [50]
+eliteSizes = [20]
+mutationRates = [0.02]
+generations_list = [500]
 
 # Output directories
 base_dir = os.path.dirname(os.path.abspath(__file__))

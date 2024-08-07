@@ -1,6 +1,7 @@
 import random
 
 def createRoute(cityList):
+    # random.seed(44)
     route = random.sample(cityList, len(cityList))
     return route
 

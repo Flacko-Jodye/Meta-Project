@@ -372,7 +372,7 @@ initialSolutionsList.append(route1)
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
 #modify objectiveNrUsed to use different objectives:
 # 1= Minimize distance, 2 = Minimize stress
-bestRoute = geneticAlgorithm(objectiveNrUsed=1, specialInitialSolutions = initialSolutionsList, population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=100)
+bestRoute = geneticAlgorithm(objectiveNrUsed=2, specialInitialSolutions = initialSolutionsList, population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
 print(bestRoute)
 
 plotRoute(bestRoute, "Best final route")

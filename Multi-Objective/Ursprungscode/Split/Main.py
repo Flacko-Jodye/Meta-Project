@@ -12,8 +12,8 @@ def print_current_config():
     for key, value in single_run_params.items():
         print(f"{key}: {value}")
 
-cityList = []
 random.seed(44)
+cityList = []
 
 for i in range(1,26):
     cityList.append(City(nr= i, traffic=int(random.random()*40), x=int(random.random() * 200), y=int(random.random() * 200)))
@@ -45,17 +45,17 @@ def run_single_experiment():
         plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
         plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')
         plotPopulationAndObjectiveValues(final_population, "Final Population")
+
     print("\nBeste Parameter und Ergebnisse:")
     print(f"PopSize: {params['popSize']}")
     print(f"EliteSize: {params['eliteSize']}")
     print(f"MutationRate: {params['mutationRate']}")
     print(f"Generations: {params['generations']}")
-    print(f"Final Distance: {1 / rankRoutes([bestRoute], 1)[0][1]}")
-    print(f"Final Stress: {1 / rankRoutes([bestRoute], 2)[0][1]}")
 
 def run_experiements(): # Tuning-Modus
     results = []
     best_overall_distance = float('inf')
+    best_overall_stress = float('inf')
     best_overall_route = None
     best_progress_distance = []
     best_progress_stress = []
@@ -101,8 +101,10 @@ def run_experiements(): # Tuning-Modus
                         best_progress_stress = progressStress
                         best_final_population = final_population
                         best_params = params
-                    print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_stress}:")
-    
+                    if final_stress < best_overall_stress:
+                        best_overall_stress = final_stress
+                    print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_distance}:")
+
     if csv_enabled:
         save_results_to_csv(results, "results.csv")
 
@@ -118,8 +120,6 @@ def run_experiements(): # Tuning-Modus
         print(f"EliteSize: {best_params['eliteSize']}")
         print(f"MutationRate: {best_params['mutationRate']}")
         print(f"Generations: {best_params['generations']}")
-        print(f"Final Distance: {best_overall_distance}")
-        print(f"Minimaler Stress: {best_overall_distance}")
 
 if __name__ == "__main__":
     if tuning_mode:
