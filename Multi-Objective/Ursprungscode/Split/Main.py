@@ -2,10 +2,11 @@ import random
 from City import City
 from GeneticAlgorithm import geneticAlgorithm
 from Helpers import getCityBasedOnNr
-from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method
+from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution
 from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress, plotParetoFront
 from RankRoutes import rankRoutes
 from Helpers import save_results_to_csv
+from InitialPopulation import createGreedyRoute, create_city_list_from_csv
 
 def print_current_config():
     print("Current configuration:")
@@ -26,7 +27,27 @@ cityNumbersRoute1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 
 route1 = []
 for nr in cityNumbersRoute1:
     route1.append(getCityBasedOnNr(cityList,nr))
-initialSolutionsList = [route1]
+
+# Define the start city and objective
+startCityNr = 1 # Starting with city number 1
+objective = 1    # 1 = Minimize distance, 2 = Minimize stress
+
+# Generate the special initial route based on the chosen objective
+route2 = createGreedyRoute(cityList, startCityNr, objective)
+
+# Beispiel: Erstellen der cityList aus der CSV-Datei
+filename = 'Multi-Objective/Ursprungscode/Split/Visualisations/Best_Route.csv'
+route3 = create_city_list_from_csv(filename)
+
+if initial_solution == "random":
+    initialSolutionsList = [route1]
+if initial_solution == "nearest neighbour":
+    initial_solutionsList = [route2]
+if initial_solution == "solution phase 1":
+    initial_solutionsList = [route3]
+
+
+
 
 print_current_config()
 
@@ -36,7 +57,7 @@ def run_single_experiment():
     print(f"ALgo läuft mit folgenden Parametern: {params}")
     bestRoute, progressDistance, progressStress, final_population = geneticAlgorithm(
         objectiveNrUsed=params["objectiveNrUsed"],
-        specialInitialSolutions=initialSolutionsList,
+        specialInitialSolutions=initial_solutionsList,
         population=cityList,
         popSize=params["popSize"],
         eliteSize=params["eliteSize"],
@@ -109,8 +130,8 @@ def run_experiements(): # Tuning-Modus
                         best_overall_stress = final_stress
                     print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_distance}:")
 
-    if csv_enabled:
-        save_results_to_csv(results, "results.csv")
+ #   if csv_enabled:
+ #       save_results_to_csv(results, "results.csv")
 
     if best_overall_route is not None and plotting_enabled:
         plotRoute(best_overall_route, "Best final route")

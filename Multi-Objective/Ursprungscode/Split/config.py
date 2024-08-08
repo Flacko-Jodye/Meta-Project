@@ -6,6 +6,9 @@ saving_enabled = False
 csv_enabled = False
 tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
 
+#select initial solution: "random", "nearest neighbour", "solution phase 1"
+initial_solution = "solution phase 1"
+
 # Selection method: "roulette", "rank", "steady_state", or "tournament"
 selection_method = "roulette"
 tournament_size = 5             # Relevant for tournament selection

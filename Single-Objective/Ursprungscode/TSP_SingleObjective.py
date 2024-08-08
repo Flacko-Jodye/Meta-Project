@@ -418,7 +418,7 @@ def save_best_route_to_csv(route, filename):
     """
 
     # Erstellen des Pfades zur Speicherung
-    file_path = os.path.join('Visualisation_Parameters', filename)
+    file_path = os.path.join('Multi-Objective/Ursprungscode/Split/Visualisations', filename)
 
     # Schreiben der Stadt-Indizes in eine CSV-Datei
     with open(file_path, 'w', newline='') as csvfile:
