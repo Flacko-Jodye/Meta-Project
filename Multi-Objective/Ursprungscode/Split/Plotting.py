@@ -104,9 +104,12 @@ def plotParetoFront(population, title="Pareto Front"):
         save_path = os.path.join(output_directory, f"{title.replace(' ', '_')}.png")
         os.makedirs(output_directory, exist_ok=True)
         plt.savefig(save_path)
-        print(f"Plot saved to {save_path}")
 
     plt.show()
+
+def plotArchiveRoutes(archive):
+    for i, route in enumerate(archive):
+        plotRoute(route, f"Archived Soulution {i + 1}")
 
 
 

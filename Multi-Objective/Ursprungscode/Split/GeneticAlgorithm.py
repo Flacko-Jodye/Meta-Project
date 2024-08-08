@@ -1,7 +1,7 @@
 import random, numpy as np, pandas as np, matplotlib.pyplot as plt
 from Fitness import Fitness
-from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory, crossover_method, mutation_method
-from Mutation import mutate, mutatePopulation
+from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory, crossover_method, mutation_method, spea2_archive_enabled
+from Mutation import mutate, mutatePopulation, mutatePopulationWithConfig
 from Crossover import ordered_crossover, one_point_crossover, edge_recombination_crossover
 from Selection import selection, selectionWithArchive
 from Archive import determineNonDominatedArchiveSize, determineNonDominatedArchive
@@ -62,7 +62,7 @@ def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archive
         selectionResults = selection(popRanked, eliteSize)
         matingpool = matingPool(currentGen, selectionResults)
         children = breedPopulation(matingpool, eliteSize)
-        nextGeneration = mutatePopulation(children, mutationRate,0)
+        nextGeneration = mutatePopulationWithConfig(children, mutationRate,eliteSize, 0)
     else:
         #<<<<< use archiv
         #TODO: ein festes Archiv vorsehen wie es im ursprünglichen SPEA2 vorgesehen ist 
@@ -70,15 +70,15 @@ def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archive
         matingpool = matingPool(currentGen, selectionResults)
         archiveSize = determineNonDominatedArchiveSize(popRanked)
         children = breedPopulation(matingpool, archiveSize)
-        #eliteSize is used to maintain solutions that should be in an archive
-        nextGeneration = mutatePopulation(children, mutationRate, eliteSize)
+        nextGeneration = mutatePopulationWithConfig(children, mutationRate, eliteSize, archiveSize)
     return nextGeneration
 
 def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations, seed = 44):
     #create initial population
     pop = initialPopulation(popSize, population, specialInitialSolutions)
     
-    archiveUsed = False
+    archiveUsed = spea2_archive_enabled
+    archive = []
     
     #provide statistics about best initial solution with regard to chosen objective
     if (objectiveNrUsed == 1 or objectiveNrUsed == 2):
@@ -116,9 +116,9 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         progressStress.append(1 / rankRoutes(pop,2)[0][1])
     print("Done!")
             
-    if plotting_enabled:
-        plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
-        plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')
+    # if plotting_enabled:
+    #     plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
+    #     plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')
     
     #provide statistics about best final solution with regard to chosen objective
     if (objectiveNrUsed == 1 or objectiveNrUsed == 2):
@@ -147,10 +147,10 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         print("Final best stress value: " + str(1/ rankRoutes(pop,2)[0][1]))
         bestRouteIndex = rankRoutes(pop,objectiveNrUsed)[0][0]
         bestRoute = pop[bestRouteIndex]
+        archive = determineNonDominatedArchive(pop, rankRoutes(pop,objectiveNrUsed))
         plotRoute(bestRoute, "Best final route")
         #TODO: ein festes Archiv vorsehen wie es im ursprünglichen SPEA2 vorgesehen ist
         # dann alle Lösungen ausgeben die im Archiv sind
-        
         
     #plot final population with regard to the two objectives
     plotPopulationAndObjectiveValues(pop, "Final Population")

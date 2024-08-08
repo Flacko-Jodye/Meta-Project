@@ -40,7 +40,7 @@ filename = 'Multi-Objective/Ursprungscode/Split/Visualisations/Best_Route.csv'
 route3 = create_city_list_from_csv(filename)
 
 if initial_solution == "random":
-    initialSolutionsList = [route1]
+    initial_solutionsList = [route1]
 if initial_solution == "nearest neighbour":
     initial_solutionsList = [route2]
 if initial_solution == "solution phase 1":
@@ -69,11 +69,11 @@ def run_single_experiment():
         plotPopulationAndObjectiveValues(final_population, "Final Population")
         plotParetoFront(final_population, "Pareto Front")
 
-    print("\nBeste Parameter und Ergebnisse:")
-    print(f"PopSize: {params['popSize']}")
-    print(f"EliteSize: {params['eliteSize']}")
-    print(f"MutationRate: {params['mutationRate']}")
-    print(f"Generations: {params['generations']}")
+    # print("\nBeste Parameter und Ergebnisse:")
+    # print(f"PopSize: {params['popSize']}")
+    # print(f"EliteSize: {params['eliteSize']}")
+    # print(f"MutationRate: {params['mutationRate']}")
+    # print(f"Generations: {params['generations']}")
 
 def run_experiements(): # Tuning-Modus
     results = []
@@ -99,7 +99,7 @@ def run_experiements(): # Tuning-Modus
                     print(f"Running experiment with {params}")
                     bestRoute, progressDistance, progressStress, final_population = geneticAlgorithm(
                         objectiveNrUsed=params["objectiveNrUsed"],
-                        specialInitialSolutions=initialSolutionsList,
+                        specialInitialSolutions=initial_solutionsList,
                         population=cityList,
                         popSize=params["popSize"],
                         eliteSize=params["eliteSize"],
