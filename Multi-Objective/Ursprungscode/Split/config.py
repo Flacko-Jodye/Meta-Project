@@ -1,13 +1,15 @@
 import os
 
 # Experiment configurations "Noch alle Modi ermöglichen"
-plotting_enabled = True
+plotting_enabled = False
 saving_enabled = False
 csv_enabled = False
 tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
 
+spea2_archive_enabled = True   # Enable SPEA2 archive
+
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
-initial_solution = "solution phase 1"
+initial_solution = "nearest neighbour"
 
 # Selection method: "roulette", "rank", "steady_state", or "tournament"
 selection_method = "roulette"
@@ -18,7 +20,7 @@ replace_size = 2                # Relevant for steady_state selection
 crossover_method = "order"
 
 # Mutation Methods: "swap", "inversion"
-mutation_method = "inversion"
+mutation_method = "swap"
 
 
 # Parameters for single run
