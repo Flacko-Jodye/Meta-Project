@@ -2,10 +2,11 @@ import matplotlib.pyplot as plt
 from City import City
 from Operations import initialPopulation, nextGeneration, rankRoutes
 from Fitness import Fitness
-from Helpers import getCityBasedOnNr
+from Helpers import getCityBasedOnNr, save_best_route_to_csv
 from plotting import plotPopulationAndObjectiveValues, plotProgress, plotRoute
 from genetic_algorithm import geneticAlgorithm
 import random, os, csv, config
+from config import save_route_to_csv
 
 
 #Create list of cities
@@ -152,6 +153,7 @@ def run_experiments(): # Tuning-Modus
 # bestRoute = geneticAlgorithm(objectiveNrUsed=1, specialInitialSolutions = initialSolutionsList, population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
 # print(bestRoute)
 
+
 # plotRoute(bestRoute, "Best final route")
 
     if best_overall_route is not None and config.plotting_enabled:
@@ -185,6 +187,8 @@ def run_single_experiment(): # Single-Experiment-Modus
         plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization', f"Progress_Distance_{params['popSize']}_{params['eliteSize']}_{params['mutationRate']}_{params['generations']}.png")
         plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization', f"Progress_Stress_{params['popSize']}_{params['eliteSize']}_{params['mutationRate']}_{params['generations']}.png")
         plotPopulationAndObjectiveValues(final_population, "Final Population", f"Final_Population_{params['popSize']}_{params['eliteSize']}_{params['mutationRate']}_{params['generations']}.png", Fitness)
+
+
 
     # Beste Parameter und Ergebnisse
         print("\nBeste Parameter und Ergebnisse:")

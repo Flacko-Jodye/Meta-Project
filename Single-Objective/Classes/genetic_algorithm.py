@@ -2,7 +2,8 @@ from Operations import initialPopulation, nextGeneration, rankRoutes
 from Fitness import Fitness
 from plotting import plotPopulationAndObjectiveValues, plotProgress, plotRoute
 import config, random
-from Main import save_best_route_to_csv
+from Helpers import save_best_route_to_csv
+from config import save_route_to_csv
 
 def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations):
     random.seed(44)
@@ -60,8 +61,9 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         #plot final population with regard to the two objectives
         plotPopulationAndObjectiveValues(pop, "Final Population", f"Final_Population_{popSize}_{eliteSize}_{mutationRate}_{generations}.png", Fitness)
 
-    save_best_route_to_csv(bestRoute, 'best_route.csv')
-    print("Beste Route wurde in 'Visualisation_Parameters/Best_Route.csv' gespeichert.")
+    if save_route_to_csv:
+        save_best_route_to_csv(bestRoute, 'best_route.csv')
+        print("Beste Route wurde in 'Visualisation_Parameters/Best_Route.csv' gespeichert.")
     
     return bestRoute, progressDistance, progressStress, pop
 

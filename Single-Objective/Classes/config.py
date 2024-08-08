@@ -4,8 +4,9 @@
 # tuning_mode = False        # Auf True setzen um den Tuning-Modus zu aktivieren --> Parameter-Set in Main.py
 
 plotting_enabled = False
-csv_enabled = False
+csv_enabled = True
 tuning_mode = False
+save_route_to_csv = True
 
 # Auswahl der Selektionsmethodik: "roulette", "rank", "steady_state" oder "tournament"
 selection_method = "roulette"
