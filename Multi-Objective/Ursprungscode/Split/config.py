@@ -5,18 +5,26 @@ plotting_enabled = True
 saving_enabled = False
 csv_enabled = False
 tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
+spea2_archive_enabled = False            # Enable SPEA2 archive
 
+# Archiv-Konfiguration
+use_fixed_archive = True                # True für festes Arhive, False für dynamisches Archiv
+max_archive_size = 20                   # Größe des Archivs
+
+# Hypervolume config
+hypervolume_enabled = True              # Enable hypervolume calculation und plotting
+hypervolume_plot_2d_enabled = True      # 2D-Plotting of hypervolume
 spea2_archive_enabled = False  # Enable SPEA2 archive
 
 gurobi_enabled = True # Enable gurobi solution
 
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
-initial_solution = "nearest neighbour"
+initial_solution = "random"
 
 # Selection method: "roulette", "rank", "steady_state", or "tournament"
 selection_method = "roulette"
-tournament_size = 5             # Relevant for tournament selection
-replace_size = 2                # Relevant for steady_state selection
+tournament_size = 5                     # Relevant for tournament selection
+replace_size = 2                        # Relevant for steady_state selection
 
 # Cross-over methods: "order", "one-point", "edge-recombination"
 crossover_method = "order"
@@ -30,7 +38,7 @@ single_run_params = {
     "popSize": 100,
     "eliteSize": 20,
     "mutationRate": 0.02,
-    "generations": 500,
+    "generations": 10,
     "objectiveNrUsed": 3  # 1 = Minimize distance, 2 = Minimize stress, 3 = Minimize both
 }
 

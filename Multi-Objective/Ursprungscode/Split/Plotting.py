@@ -107,6 +107,39 @@ def plotParetoFront(population, title="Pareto Front"):
 
     plt.show()
 
+def plotHypervolume(hypervolume_progress, title = "Progress of Hypervolume"):
+    plt.figure()
+    plt.plot(hypervolume_progress)
+    plt.ylabel('Hypervolume')
+    plt.xlabel('Generation')
+    plt.title(title)
+    plt.grid(True)
+    plt.show()
+
+def plotHypervolume2D(pareto_front, reference_point, title="Hypervolume in 2D Space", point_size = 10):
+    distances = [Fitness(route).routeDistance() for route in pareto_front]
+    stresses = [Fitness(route).routeStress() for route in pareto_front]
+
+    sorted_pairs = sorted(zip(distances, stresses))
+    sorted_distances, sorted_stresses = zip(*sorted_pairs)
+    
+    plt.figure()
+    plt.fill_between(sorted_distances, sorted_stresses, reference_point[1], color="orange", alpha=0.3, label="Hypervolume")
+    plt.scatter(sorted_distances, sorted_stresses, marker='o', color='black', s = point_size)
+    plt.plot(reference_point[0], reference_point[1], 'ro', label='Reference Point')
+    plt.xlabel('Distance (Objective 1)')
+    plt.ylabel('Stress (Objective 2)')
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    
+    if saving_enabled:
+        save_path = os.path.join(output_directory, f"{title.replace(' ', '_')}.png")
+        os.makedirs(output_directory, exist_ok=True)
+        plt.savefig(save_path)
+        
+    plt.show()
+
 def plotArchiveRoutes(archive):
     for i, route in enumerate(archive):
         plotRoute(route, f"Archived Soulution {i + 1}")
