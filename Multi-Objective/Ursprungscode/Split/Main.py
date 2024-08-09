@@ -151,11 +151,6 @@ if __name__ == "__main__":
     if tuning_mode:
         run_experiements()
     elif gurobi_enabled:
-        optimal_route=gurobi_tsp(cityList)
-        # Berechnung der Gesamtdistanz und des Gesamtstresses
-        total_distance, total_stress = calculate_total_distance_and_stress(cityList, optimal_route)
-        # Ausgabe der Ergebnisse
-        print(f"Gesamtdistanz der optimalen Route: {total_distance}")
-        print(f"Gesamtstress der optimalen Route: {total_stress}")
+        optimal_route = gurobi_tsp(cityList)
     else:
         run_single_experiment()
