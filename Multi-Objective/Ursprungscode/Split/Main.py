@@ -2,11 +2,12 @@ import random
 from City import City
 from GeneticAlgorithm import geneticAlgorithm
 from Helpers import getCityBasedOnNr
-from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution
+from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution, gurobi_enabled
 from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress, plotParetoFront
 from RankRoutes import rankRoutes
-from Helpers import save_results_to_csv, save_best_route_to_csv
+from Helpers import save_results_to_csv
 from InitialPopulation import createGreedyRoute, create_city_list_from_csv
+from gurobi import gurobi_tsp, calculate_total_distance_and_stress
 
 def print_current_config():
     print("Current configuration:")
@@ -149,5 +150,12 @@ def run_experiements(): # Tuning-Modus
 if __name__ == "__main__":
     if tuning_mode:
         run_experiements()
+    elif gurobi_enabled:
+        optimal_route=gurobi_tsp(cityList)
+        # Berechnung der Gesamtdistanz und des Gesamtstresses
+        total_distance, total_stress = calculate_total_distance_and_stress(cityList, optimal_route)
+        # Ausgabe der Ergebnisse
+        print(f"Gesamtdistanz der optimalen Route: {total_distance}")
+        print(f"Gesamtstress der optimalen Route: {total_stress}")
     else:
         run_single_experiment()

@@ -1,12 +1,14 @@
 import os
 
 # Experiment configurations "Noch alle Modi ermöglichen"
-plotting_enabled = False
+plotting_enabled = True
 saving_enabled = False
 csv_enabled = False
 tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
 
-spea2_archive_enabled = True   # Enable SPEA2 archive
+spea2_archive_enabled = False  # Enable SPEA2 archive
+
+gurobi_enabled = True # Enable gurobi solution
 
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
 initial_solution = "nearest neighbour"
