@@ -67,8 +67,10 @@ def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archive
     else:
         #<<<<< use archiv
         #TODO: ein festes Archiv vorsehen wie es im ursprünglichen SPEA2 vorgesehen ist 
+        archive = determineNonDominatedArchive(currentGen, popRanked)
         selectionResults = selectionWithArchive(popRanked)
         matingpool = matingPool(currentGen, selectionResults)
+        
         archiveSize = determineNonDominatedArchiveSize(popRanked)
         children = breedPopulation(matingpool, archiveSize)
         nextGeneration = mutatePopulationWithConfig(children, mutationRate, eliteSize, archiveSize)
@@ -168,5 +170,11 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         
     #plot final population with regard to the two objectives
     plotPopulationAndObjectiveValues(pop, "Final Population")
+    if hypervolume_enabled:
+        # Finales Hypervolumen für die letzte Generation berechnen
+        final_front = [(Fitness(route).routeDistance(), Fitness(route).routeStress()) for route in determineNonDominatedArchive(pop, rankRoutes(pop, 3))]
+        final_hypervolume = hv.compute(final_front)
+        print(f"Final Hypervolume: {final_hypervolume}")
+
 
     return bestRoute, progressDistance, progressStress, pop

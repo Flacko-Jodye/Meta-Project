@@ -7,9 +7,13 @@ csv_enabled = False
 tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
 spea2_archive_enabled = False            # Enable SPEA2 archive
 
+# Archiv-Konfiguration
+use_fixed_archive = True                # True für festes Arhive, False für dynamisches Archiv
+max_archive_size = 20                   # Größe des Archivs
+
 # Hypervolume config
 hypervolume_enabled = True              # Enable hypervolume calculation und plotting
-hypervolume_plot_2d_enabled = True     # 2D-Plotting of hypervolume
+hypervolume_plot_2d_enabled = True      # 2D-Plotting of hypervolume
 
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
 initial_solution = "random"
@@ -31,7 +35,7 @@ single_run_params = {
     "popSize": 100,
     "eliteSize": 20,
     "mutationRate": 0.02,
-    "generations": 500,
+    "generations": 10,
     "objectiveNrUsed": 3  # 1 = Minimize distance, 2 = Minimize stress, 3 = Minimize both
 }
 
