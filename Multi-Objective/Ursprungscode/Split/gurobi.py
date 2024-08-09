@@ -1,6 +1,6 @@
 from gurobipy import Model, GRB, quicksum
 import numpy as np, random
-import City
+from City import City
 
 def extract_route(cityList, x):
     n = len(cityList)
