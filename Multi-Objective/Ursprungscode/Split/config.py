@@ -5,16 +5,19 @@ plotting_enabled = False
 saving_enabled = False
 csv_enabled = False
 tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
+spea2_archive_enabled = False            # Enable SPEA2 archive
 
-spea2_archive_enabled = True   # Enable SPEA2 archive
+# Hypervolume config
+hypervolume_enabled = True              # Enable hypervolume calculation und plotting
+hypervolume_plot_2d_enabled = True     # 2D-Plotting of hypervolume
 
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
-initial_solution = "nearest neighbour"
+initial_solution = "random"
 
 # Selection method: "roulette", "rank", "steady_state", or "tournament"
 selection_method = "roulette"
-tournament_size = 5             # Relevant for tournament selection
-replace_size = 2                # Relevant for steady_state selection
+tournament_size = 5                     # Relevant for tournament selection
+replace_size = 2                        # Relevant for steady_state selection
 
 # Cross-over methods: "order", "one-point", "edge-recombination"
 crossover_method = "order"

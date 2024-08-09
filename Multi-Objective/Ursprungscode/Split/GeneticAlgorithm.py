@@ -1,13 +1,14 @@
 import random, numpy as np, pandas as np, matplotlib.pyplot as plt
 from Fitness import Fitness
-from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory, crossover_method, mutation_method, spea2_archive_enabled
+from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory, crossover_method, mutation_method, spea2_archive_enabled, hypervolume_enabled, hypervolume_plot_2d_enabled
 from Mutation import mutate, mutatePopulation, mutatePopulationWithConfig
 from Crossover import ordered_crossover, one_point_crossover, edge_recombination_crossover
 from Selection import selection, selectionWithArchive
 from Archive import determineNonDominatedArchiveSize, determineNonDominatedArchive
 from InitialPopulation import createRoute, initialPopulation
 from RankRoutes import rankRoutesBasedOnDominance, rankRoutes
-from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress
+from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress, plotHypervolume, plotHypervolume2D
+from Hypervolume import HyperVolume
 import os
 
 
@@ -80,6 +81,11 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
     archiveUsed = spea2_archive_enabled
     archive = []
     
+    if hypervolume_enabled:
+        # Initialize the reference point for the hypervolume calculation
+        ref_point = [max(Fitness(route).routeDistance() for route in pop) + 1, max(Fitness(route).routeStress() for route in pop) + 1]
+        hv = HyperVolume(ref_point)  # Initialize the HyperVolume class
+
     #provide statistics about best initial solution with regard to chosen objective
     if (objectiveNrUsed == 1 or objectiveNrUsed == 2):
         print("Initial objective: " + str(1 / rankRoutes(pop,objectiveNrUsed)[0][1]))
@@ -105,7 +111,7 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
     progressDistance.append(1 / rankRoutes(pop,1)[0][1])
     progressStress = []
     progressStress.append(1 / rankRoutes(pop,2)[0][1])
-    
+    hypervolume_progress = []
     
     #create new generations of populations
     for i in range(0, generations):
@@ -114,11 +120,24 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         #store infos to plot progress when finished
         progressDistance.append(1 / rankRoutes(pop,1)[0][1])
         progressStress.append(1 / rankRoutes(pop,2)[0][1])
-    print("Done!")
+
+        if hypervolume_enabled:
+            # Calculate the hypervolume of the current population
+            front = [(Fitness(route).routeDistance(), Fitness(route).routeStress()) for route in determineNonDominatedArchive(pop, rankRoutes(pop, 3))]
+            hv = HyperVolume(ref_point)
+            hypervolume_progress.append(hv.compute(front))
+            if i == generations - 1 and hypervolume_plot_2d_enabled:
+                plotHypervolume2D(determineNonDominatedArchive(pop, rankRoutes(pop, 3)), ref_point, title=f"Hypervolume at Generation {i+1}")
+
+        if i == generations - 1 and plotting_enabled:
+            plotHypervolume2D(determineNonDominatedArchive(pop, rankRoutes(pop, 3)), ref_point, title=f"Hypervolume at Generation {i+1}")
+    if hypervolume_enabled:
+        plotHypervolume(hypervolume_progress, "Progress of Hypervolume")
             
     # if plotting_enabled:
-    #     plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
-    #     plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')
+    #     # plotProgress(progressDistance, 'Distance', 'Progress of Distance Minimization')
+    #     # plotProgress(progressStress, 'Stress', 'Progress of Stress Minimization')
+    #     plotProgress('Hypervolume', 'Progress of Hypervolume')
     
     #provide statistics about best final solution with regard to chosen objective
     if (objectiveNrUsed == 1 or objectiveNrUsed == 2):
@@ -128,9 +147,6 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         print("Final distance : " + str(Fitness(bestRoute).routeDistance()))
         print("Final stress:    " + str(Fitness(bestRoute).routeStress()))
 
-        
-        #Provide special initial solutions    <<<<<<<<<<<
-        #print city Indizes for initial solution
         bestRouteIndizes = []
         for city in bestRoute:
             bestRouteIndizes.append(city.nr)
@@ -149,8 +165,6 @@ def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSi
         bestRoute = pop[bestRouteIndex]
         archive = determineNonDominatedArchive(pop, rankRoutes(pop,objectiveNrUsed))
         plotRoute(bestRoute, "Best final route")
-        #TODO: ein festes Archiv vorsehen wie es im ursprünglichen SPEA2 vorgesehen ist
-        # dann alle Lösungen ausgeben die im Archiv sind
         
     #plot final population with regard to the two objectives
     plotPopulationAndObjectiveValues(pop, "Final Population")

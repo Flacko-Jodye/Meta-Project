@@ -22,7 +22,7 @@ single_run_params = {
     }
 
 # Einstellen der Parameter für den Tuning-Modus
-popSizes = [50, 100, 200, 300]
+popSizes = [50, 100, 200]
 eliteSizes = [10, 20, 30]
-mutationRates = [0.01, 0.02, 0.05, 0.1]
+mutationRates = [0.01, 0.05, 0.1]
 generations_list = [100, 200, 500]
