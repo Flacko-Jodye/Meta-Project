@@ -175,11 +175,6 @@ def run_experiments():  # Tuning-Modus
     elif config.single_run_params["objectiveNrUsed"] == 3:
         print(f"Final Combined Metric (Distance + Stress): {best_overall_metric}")
 
-
-
-    if plotting_initialsolution_enabeld:
-        plot_initial_solutions()
-
 if __name__ == "__main__":
     if tuning_mode:
         run_experiments()
