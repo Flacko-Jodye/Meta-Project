@@ -6,7 +6,7 @@ from Helpers import getCityBasedOnNr, save_best_route_to_csv
 from plotting import plotPopulationAndObjectiveValues, plotProgress, plotRoute
 from genetic_algorithm import geneticAlgorithm
 import random, os, csv, config
-from config import save_route_to_csv
+from config import save_route_to_csv, use_initial_solution
 
 
 #Create list of cities
@@ -78,7 +78,8 @@ route2 = createGreedyRoute(cityList, startCityNr, objective)
 
 initialSolutionsList = []
 #TODO: Spezielle Intiallösungen der initialSolutionsList übergeben    
-initialSolutionsList.append(route1)    
+if use_initial_solution:
+    initialSolutionsList.append(route1)    
 #Run the genetic algorithm
 #modify parameters popSize, eliteSize, mutationRate, generations to search for the best solution
 #modify objectiveNrUsed to use different objectives:
@@ -107,12 +108,17 @@ def save_results_to_csv(results, filename):
 
 def run_experiments(): # Tuning-Modus
     best_overall_route = None
-    best_overall_distance = float('inf')
+    best_overall_metric = float('inf')  # Für beide Ziele
     best_progress_distance = None
     best_progress_stress = None
     best_final_population = None
     best_params = None
     results = []
+
+    selection_methods = ["roulette", "rank", "steady_state", "tournament"]
+    for selection_method in selection_methods:
+        config.selection_method = selection_method
+        print(f"Running experiment for selection method: {selection_method}")
 
     for popSize in config.popSizes:
         for eliteSize in config.eliteSizes:
@@ -130,7 +136,12 @@ def run_experiments(): # Tuning-Modus
                     )
                     final_distance = 1 / rankRoutes([bestRoute], 1)[0][1]
                     final_stress = 1 / rankRoutes([bestRoute], 2)[0][1]
+                    if config.single_run_params["objectiveNrUsed"] == 1:
+                        current_metric = final_distance
+                    else:
+                        current_metric = final_stress
                     results.append({
+                        "selectionMethod": selection_method,
                         "popSize": popSize,
                         "eliteSize": eliteSize,
                         "mutationRate": mutationRate,
@@ -139,13 +150,13 @@ def run_experiments(): # Tuning-Modus
                         "finalStress": final_stress,
                         "params": f"{popSize}_{eliteSize}_{mutationRate}_{generations}"
                     })
-                    if final_distance < best_overall_distance:
-                        best_overall_distance = final_distance
+                    if current_metric < best_overall_metric:
+                        best_overall_metric = current_metric
                         best_overall_route = bestRoute
                         best_progress_distance = progressDistance
                         best_progress_stress = progressStress
                         best_final_population = final_population
-                        best_params = (popSize, eliteSize, mutationRate, generations)
+                        best_params = (selection_method, popSize, eliteSize, mutationRate, generations)
                     print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_stress}:")
         if config.csv_enabled:
             save_results_to_csv(results, results_file)
@@ -164,11 +175,15 @@ def run_experiments(): # Tuning-Modus
 
     if best_params is not None:
         print("\nBeste Parameter und Ergebnisse:")
-        print(f"PopSize: {best_params[0]}")
-        print(f"EliteSize: {best_params[1]}")
-        print(f"MutationRate: {best_params[2]}")
-        print(f"Generations: {best_params[3]}")
-        print(f"Final Distance: {best_overall_distance}")
+        print(f"SelectionMethod: {best_params[0]}")
+        print(f"PopSize: {best_params[1]}")
+        print(f"EliteSize: {best_params[2]}")
+        print(f"MutationRate: {best_params[3]}")
+        print(f"Generations: {best_params[4]}")
+        if config.single_run_params["objectiveNrUsed"] == 1:
+            print(f"Final Distance: {best_overall_metric}")
+        else:
+            print(f"Final Stress: {best_overall_metric}")
 
 def run_single_experiment(): # Single-Experiment-Modus
     params = config.single_run_params
