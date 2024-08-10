@@ -4,19 +4,20 @@ import os
 plotting_enabled = True
 saving_enabled = False
 csv_enabled = False
-tuning_mode = False                  #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
-spea2_archive_enabled = False            # Enable SPEA2 archive
+tuning_mode = False                 #TODO Noch anpassen, dass seleciton, mutation und rekombination getuned werden können
+spea2_archive_enabled = False       # Enable SPEA2 archive
+plotting_initialsolution_enabeld = False         
 
 # Archiv-Konfiguration
-use_fixed_archive = True                # True für festes Arhive, False für dynamisches Archiv
+use_fixed_archive = False                # True für festes Arhive, False für dynamisches Archiv
 max_archive_size = 20                   # Größe des Archivs
 
 # Hypervolume config
-hypervolume_enabled = True              # Enable hypervolume calculation und plotting
-hypervolume_plot_2d_enabled = True      # 2D-Plotting of hypervolume
+hypervolume_enabled = False              # Enable hypervolume calculation und plotting
+hypervolume_plot_2d_enabled = False      # 2D-Plotting of hypervolume
 spea2_archive_enabled = False  # Enable SPEA2 archive
 
-gurobi_enabled = True # Enable gurobi solution
+gurobi_enabled = False # Enable gurobi solution
 
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
 initial_solution = "random"

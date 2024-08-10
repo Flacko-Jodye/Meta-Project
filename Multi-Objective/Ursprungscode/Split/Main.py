@@ -2,12 +2,13 @@ import random
 from City import City
 from GeneticAlgorithm import geneticAlgorithm
 from Helpers import getCityBasedOnNr
-from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution, gurobi_enabled
+from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution, gurobi_enabled, plotting_initialsolution_enabeld
 from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress, plotParetoFront
 from RankRoutes import rankRoutes
 from Helpers import save_results_to_csv
 from InitialPopulation import createGreedyRoute, create_city_list_from_csv
 from gurobi import gurobi_tsp, calculate_total_distance_and_stress
+from Plotting_InitialSolution import plot_initial_solutions
 
 def print_current_config():
     print("Current configuration:")
@@ -31,7 +32,7 @@ for nr in cityNumbersRoute1:
 
 # Define the start city and objective
 startCityNr = 1 # Starting with city number 1
-objective = 1    # 1 = Minimize distance, 2 = Minimize stress
+objective = 2    # 1 = Minimize distance, 2 = Minimize stress
 
 # Generate the special initial route based on the chosen objective
 route2 = createGreedyRoute(cityList, startCityNr, objective)
@@ -146,6 +147,9 @@ def run_experiements(): # Tuning-Modus
         print(f"EliteSize: {best_params['eliteSize']}")
         print(f"MutationRate: {best_params['mutationRate']}")
         print(f"Generations: {best_params['generations']}")
+
+    if plotting_initialsolution_enabeld:
+        plot_initial_solutions()
 
 if __name__ == "__main__":
     if tuning_mode:
