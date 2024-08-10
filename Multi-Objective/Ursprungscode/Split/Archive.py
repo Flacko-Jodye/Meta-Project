@@ -45,7 +45,7 @@ def reduceArchive(archive, max_size):
         fitness_stress = 1 / Fitness(archive[i]).routeFitnessStressBased()
         combined_fitness = 0.5 * fitness_distance + 0.5 * fitness_stress    # Gewichtete Kombination beide Fitness-Werte
 
-        combined_score = 0.7 * combined_fitness + 0.3 * diversity_score     # Gewichteter kombinierter Score (70% Fitness, 30% Diversität)
+        combined_score = combined_fitness + diversity_score     # Kombinierter Score
         combined_scores.append((combined_score, archive[i]))
 
     # Archiv sortieren basiend auf kombinierten Scores
