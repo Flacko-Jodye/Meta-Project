@@ -13,14 +13,14 @@ use_fixed_archive = False                # True für festes Arhive, False für d
 max_archive_size = 20                   # Größe des Archivs
 
 # Hypervolume config
-hypervolume_enabled = False              # Enable hypervolume calculation und plotting
+hypervolume_enabled = True             # Enable hypervolume calculation und plotting
 hypervolume_plot_2d_enabled = False      # 2D-Plotting of hypervolume
 spea2_archive_enabled = False  # Enable SPEA2 archive
 
 gurobi_enabled = False # Enable gurobi solution
 
 #select initial solution: "random", "nearest neighbour", "solution phase 1"
-initial_solution = "random"
+initial_solution = "solution phase 1"
 
 # Selection method: "roulette", "rank", "steady_state", or "tournament"
 selection_method = "roulette"
