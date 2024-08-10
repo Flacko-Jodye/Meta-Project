@@ -1,7 +1,7 @@
 import os
 
 # Configurations
-plotting_enabled = False                # Enable plotting
+plotting_enabled = True                # Enable plotting
 saving_enabled = False                  # Enable saving of plots
 csv_enabled = False                     # Enable saving of csv files
 tuning_mode = False                     # Enable tuning mode
@@ -27,7 +27,7 @@ tournament_size = 5                     # Relevant for tournament selection
 replace_size = 2                        # Relevant for steady_state selection
 
 # Cross-over methods: "order", "ein_punkt", "edge-recombination"
-crossover_method = "ein_punkt"
+crossover_method = "order"
 
 # Mutation Methods: "swap", "inversion"
 mutation_method = "swap"
