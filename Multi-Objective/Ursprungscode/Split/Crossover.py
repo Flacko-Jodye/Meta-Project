@@ -25,41 +25,42 @@ def ordered_crossover (parent1, parent2):
     child = childP1 + childP2
     return child
 
-def one_point_crossover(parent1, parent2):
-    crossover_point = random.randint(1, len(parent1) - 1)
-    child = parent1[:crossover_point]
+def ein_punkt_crossover(elter1, elter2):
+    ueberkreuzungspunkt = random.randint(1, len(elter1) - 1)
+    kind = elter1[:ueberkreuzungspunkt]
 
-    for city in parent2:
-        if city not in child:
-            child.append(city)
+    for stadt in elter2:
+        if stadt not in kind:
+            kind.append(stadt)
 
-    return child
+    return kind
 
-def edge_recombination_crossover(parent1, parent2):
-    def build_edge_map(p1, p2):
-        edge_map = {i: set() for i in range(1, len(p1) + 1)}
-        for p in [p1, p2]:
-            for i in range(len(p)):
-                left = p[i - 1] if i > 0 else p[-1]
-                right = p[i + 1] if i < len(p) - 1 else p[0]
-                edge_map[p[i].nr].update({left.nr, right.nr})
-        return edge_map
-    
-    edge_map = build_edge_map(parent1, parent2)
-    current_city = random.choice(parent1)
-    child = [current_city]
+def edge_recombination_crossover(elter1, elter2):
+    def erstelle_kantenkarte(e1, e2):
+        karten_map = {i: set() for i in range(1, len(e1) + 1)}
+        for elternteil in [e1, e2]:
+            for index in range(len(elternteil)):
+                links = elternteil[index - 1] if index > 0 else elternteil[-1]
+                rechts = elternteil[index + 1] if index < len(elternteil) - 1 else elternteil[0]
+                karten_map[elternteil[index].nr].update([links.nr, rechts.nr])
+        return karten_map
 
-    while len(child) < len(parent1):
-        for neighbors in edge_map.values():
-            neighbors.discard(current_city.nr)
-        
-        if edge_map[current_city.nr]:
-            next_city_nr = min(edge_map[current_city.nr], key=lambda x: len(edge_map[x]))
+    karten_map = erstelle_kantenkarte(elter1, elter2)
+    aktuelle_stadt = random.choice(elter1)
+    nachkomme = [aktuelle_stadt]
+
+    while len(nachkomme) < len(elter1):
+        for nachbarn in karten_map.values():
+            nachbarn.discard(aktuelle_stadt.nr)
+
+        if karten_map[aktuelle_stadt.nr]:
+            naechste_stadt_nr = min(karten_map[aktuelle_stadt.nr], key=lambda x: len(karten_map[x]))
         else:
-            remaining_cities = [city for city in parent1 if city not in child]
-            next_city_nr = random.choice(remaining_cities).nr
-        
-        current_city = next(city for city in parent1 if city.nr == next_city_nr)
-        child.append(current_city)
-    
-    return child
+            uebrige_staedte = [stadt.nr for stadt in elter1 if stadt not in nachkomme]
+            naechste_stadt_nr = random.choice(uebrige_staedte)
+
+        naechste_stadt = next(stadt for stadt in elter1 if stadt.nr == naechste_stadt_nr)
+        nachkomme.append(naechste_stadt)
+        aktuelle_stadt = naechste_stadt
+
+    return nachkomme

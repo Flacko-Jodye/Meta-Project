@@ -2,7 +2,7 @@ import random, numpy as np, pandas as np, matplotlib.pyplot as plt
 from Fitness import Fitness
 from config import selection_method, tournament_size, replace_size, plotting_enabled, saving_enabled, output_directory, crossover_method, mutation_method, spea2_archive_enabled, hypervolume_enabled, hypervolume_plot_2d_enabled
 from Mutation import mutate, mutatePopulation, mutatePopulationWithConfig
-from Crossover import ordered_crossover, one_point_crossover, edge_recombination_crossover
+from Crossover import ordered_crossover, ein_punkt_crossover, edge_recombination_crossover
 from Selection import selection, selectionWithArchive
 from Archive import determineNonDominatedArchiveSize, determineNonDominatedArchive
 from InitialPopulation import createRoute, initialPopulation
@@ -26,8 +26,8 @@ def breed(parent1, parent2):
 
     if crossover_method == "order":
         return ordered_crossover(parent1, parent2)
-    elif crossover_method == "one-point":
-        return one_point_crossover(parent1, parent2)
+    elif crossover_method == "ein_punkt":
+        return ein_punkt_crossover(parent1, parent2)
     elif crossover_method == "edge-recombination":
         return edge_recombination_crossover(parent1, parent2)
     else:
