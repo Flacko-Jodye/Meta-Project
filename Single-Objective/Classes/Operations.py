@@ -4,7 +4,8 @@ import pandas as pd
 import operator
 from City import City
 from Fitness import Fitness
-from config import selection_method, tournament_size, replace_size
+# from config import selection_method, tournament_size, replace_size, use_initial_solution
+import config
 
 #Create our initial population
 #Route generator
@@ -16,9 +17,8 @@ def createRoute(cityList):
 def initialPopulation(popSize, cityList, specialInitialSolutions):
     population = []
     
-    #TODO: Hinzufügen der speziellen Initiallösungen aus specialInitialSolutions
-    population.extend(specialInitialSolutions)
-    
+    if config.use_initial_solution:
+        population.extend(specialInitialSolutions)    
     numberInitialSolutions = len(specialInitialSolutions)
     print ("Number of special initial solutions:" + str(numberInitialSolutions))
 
@@ -45,16 +45,17 @@ def rankRoutes(population, objectiveNrUsed):
 #TODO: Z.B. Turnierbasierte Selektion statt fitnessproportionaler Selektion
 # roulette wheel by calculating a relative fitness weight for each individual
 def selection(popRanked, eliteSize):
-    if selection_method == "roulette":
+    # print(f"Using selection method: {config.selection_method}")       # Debug
+    if config.selection_method == "roulette":
         return rouletteWheelSelection(popRanked, eliteSize)
-    elif selection_method == "tournament":
-        return tournamentSelection(popRanked, eliteSize, tournament_size)
-    elif selection_method == "rank":
+    elif config.selection_method == "tournament":
+        return tournamentSelection(popRanked, eliteSize, config.tournament_size)
+    elif config.selection_method == "rank":
         return rankBasedSelection(popRanked, eliteSize)
-    elif selection_method == "steady_state":
-        return steadyStateSelection(popRanked, eliteSize, replace_size)
+    elif config.selection_method == "steady_state":
+        return steadyStateSelection(popRanked, eliteSize, config.replace_size)
     else:
-        raise ValueError("Unknown selection method: {}".format(selection_method))
+        raise ValueError("Unknown selection method: {}".format(config.selection_method))
 
 def rouletteWheelSelection(popRanked, eliteSize):
     selectionResults = []

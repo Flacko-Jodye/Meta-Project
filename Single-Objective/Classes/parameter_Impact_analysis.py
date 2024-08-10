@@ -1,3 +1,5 @@
+# Plotten der Impacts der Parameter PopSize, EliteSize, MutationRate und Generations auf die Distanz und den Stress
+
 import matplotlib.pyplot as plt
 import config
 from City import City

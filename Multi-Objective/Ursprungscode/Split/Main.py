@@ -49,6 +49,8 @@ if initial_solution == "solution phase 1":
     initial_solutionsList = [route3]
 
 
+
+
 print_current_config()
 
 # Nur mit einer Parameterkonfiguration laufen
@@ -130,9 +132,8 @@ def run_experiements(): # Tuning-Modus
                         best_overall_stress = final_stress
                     print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_distance}:")
 
-    if csv_enabled:
-        save_results_to_csv(results, "results.csv")
-
+ #   if csv_enabled:
+ #       save_results_to_csv(results, "results.csv")
 
     if best_overall_route is not None and plotting_enabled:
         plotRoute(best_overall_route, "Best final route")
