@@ -285,16 +285,6 @@ class MultiList:
             node.next[i].prev[i] = node
             if bounds[i] > node.cargo[i]:
                 bounds[i] = node.cargo[i]
-            
-
-
-# if __name__ == "__main__":
-
-#     # Example:
-#     referencePoint = [2, 2, 2]
-#     hv = HyperVolume(referencePoint)
-#     front = [[1,0,1], [0,1,0]]
-#     volume = hv.compute(front)
 
             
             

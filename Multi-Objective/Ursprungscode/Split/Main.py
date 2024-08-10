@@ -2,7 +2,10 @@ import random
 from City import City
 from GeneticAlgorithm import geneticAlgorithm
 from Helpers import getCityBasedOnNr
-from config import single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution, gurobi_enabled, plotting_initialsolution_enabeld
+from config import (single_run_params, tuning_mode, popSizes, eliteSizes, mutationRates, generations_list, plotting_enabled, 
+                    csv_enabled, saving_enabled, output_directory, selection_method, crossover_method, mutation_method, initial_solution, 
+                    gurobi_enabled, selection_methods, crossover_methods, mutation_methods)
+import config
 from Plotting import plotPopulationAndObjectiveValues, plotRoute, plotProgress, plotParetoFront
 from RankRoutes import rankRoutes
 from Helpers import save_results_to_csv
@@ -79,82 +82,107 @@ def run_single_experiment():
     # print(f"MutationRate: {params['mutationRate']}")
     # print(f"Generations: {params['generations']}")
 
-def run_experiements(): # Tuning-Modus
-    results = []
+def run_experiments():  # Tuning-Modus
+    best_overall_route = None
     best_overall_distance = float('inf')
     best_overall_stress = float('inf')
-    best_overall_route = None
-    best_progress_distance = []
-    best_progress_stress = []
+    best_progress_distance = None
+    best_progress_stress = None
     best_final_population = None
     best_params = None
+    results = []
 
-    for popSize in popSizes:
-        for eliteSize in eliteSizes:
-            for mutationRate in mutationRates:
-                for generations in generations_list:
-                    params = {
-                        "popSize": popSize,
-                        "eliteSize": eliteSize,
-                        "mutationRate": mutationRate,
-                        "generations": generations,
-                        "objectiveNrUsed": single_run_params["objectiveNrUsed"]
-                    }
-                    print(f"Running experiment with {params}")
-                    bestRoute, progressDistance, progressStress, final_population = geneticAlgorithm(
-                        objectiveNrUsed=params["objectiveNrUsed"],
-                        specialInitialSolutions=initial_solutionsList,
-                        population=cityList,
-                        popSize=params["popSize"],
-                        eliteSize=params["eliteSize"],
-                        mutationRate=params["mutationRate"],
-                        generations=params["generations"]
-                    )
-                    final_distance = 1 / rankRoutes([bestRoute], 1)[0][1]
-                    final_stress = 1 / rankRoutes([bestRoute], 2)[0][1]
-                    results.append({
-                        "popSize": popSize,
-                        "eliteSize": eliteSize,
-                        "mutationRate": mutationRate,
-                        "generations": generations,
-                        "finalDistance": final_distance,
-                        "finalStress": final_stress,
-                        "params": f"{popSize}_{eliteSize}_{mutationRate}_{generations}"
-                    })
-                    if final_distance < best_overall_distance:
-                        best_overall_distance = final_distance
-                        best_overall_route = bestRoute
-                        best_progress_distance = progressDistance
-                        best_progress_stress = progressStress
-                        best_final_population = final_population
-                        best_params = params
-                    if final_stress < best_overall_stress:
-                        best_overall_stress = final_stress
-                    print(f"Ergebnisse für popSize={popSize}, eliteSize={eliteSize}, mutationRate={mutationRate}, generations={generations}, Stress = {final_distance}:")
+    for popSize in config.popSizes:
+        for eliteSize in config.eliteSizes:
+            for mutationRate in config.mutationRates:
+                for generations in config.generations_list:
+                    for selection_method in config.selection_methods:
+                        for crossover_method in config.crossover_methods:
+                            for mutation_method in config.mutation_methods:
+                                print(f"Running with {popSize=}, {eliteSize=}, {mutationRate=}, {generations=}, {selection_method=}, {crossover_method=}, {mutation_method=}")
+                                bestRoute, progressDistance, progressStress, final_population = geneticAlgorithm(
+                                    objectiveNrUsed=config.single_run_params["objectiveNrUsed"],
+                                    specialInitialSolutions=initial_solutionsList, 
+                                    population=cityList,
+                                    popSize=popSize,
+                                    eliteSize=eliteSize,
+                                    mutationRate=mutationRate,
+                                    generations=generations
+                                )
+                                final_distance = 1 / rankRoutes([bestRoute], 1)[0][1]
+                                final_stress = 1 / rankRoutes([bestRoute], 2)[0][1]
 
- #   if csv_enabled:
- #       save_results_to_csv(results, "results.csv")
+                                if config.single_run_params["objectiveNrUsed"] == 1:
+                                    current_metric = final_distance
+                                elif config.single_run_params["objectiveNrUsed"] == 2:
+                                    current_metric = final_stress
+                                elif config.single_run_params["objectiveNrUsed"] == 3:
+                                    current_metric = final_distance + final_stress
 
-    if best_overall_route is not None and plotting_enabled:
-        plotRoute(best_overall_route, "Best final route")
-        plotProgress(best_progress_distance, 'Distance', 'Progress of Distance Minimization')
-        plotProgress(best_progress_stress, 'Stress', 'Progress of Stress Minimization')
-        plotPopulationAndObjectiveValues(best_final_population, "Final Population")
-        plotParetoFront(best_final_population, "Pareto Front")
+                                results.append({
+                                    "popSize": popSize,
+                                    "eliteSize": eliteSize,
+                                    "mutationRate": mutationRate,
+                                    "generations": generations,
+                                    "selection_method": selection_method,
+                                    "crossover_method": crossover_method,
+                                    "mutation_method": mutation_method,
+                                    "finalDistance": final_distance,
+                                    "finalStress": final_stress,
+                                    "current_metric": current_metric,
+                                    "params": f"{popSize}_{eliteSize}_{mutationRate}_{generations}_{selection_method}_{crossover_method}_{mutation_method}"
+                                })
 
-    if best_params is not None:
-        print("\nBeste Parameter und Ergebnisse: ")
-        print(f"PopSize: {best_params['popSize']}")
-        print(f"EliteSize: {best_params['eliteSize']}")
-        print(f"MutationRate: {best_params['mutationRate']}")
-        print(f"Generations: {best_params['generations']}")
+                                if config.single_run_params["objectiveNrUsed"] == 1:
+                                    if current_metric < best_overall_distance:
+                                        best_overall_distance = current_metric
+                                        best_overall_route = bestRoute
+                                        best_progress_distance = progressDistance
+                                        best_progress_stress = progressStress
+                                        best_final_population = final_population
+                                        best_params = (popSize, eliteSize, mutationRate, generations, selection_method, crossover_method, mutation_method)
+                                elif config.single_run_params["objectiveNrUsed"] == 2:
+                                    if current_metric < best_overall_stress:
+                                        best_overall_stress = current_metric
+                                        best_overall_route = bestRoute
+                                        best_progress_distance = progressDistance
+                                        best_progress_stress = progressStress
+                                        best_final_population = final_population
+                                        best_params = (popSize, eliteSize, mutationRate, generations, selection_method, crossover_method, mutation_method)
+                                elif config.single_run_params["objectiveNrUsed"] == 3:
+                                    if current_metric < best_overall_distance + best_overall_stress:
+                                        best_overall_metric = current_metric
+                                        best_overall_route = bestRoute
+                                        best_progress_distance = progressDistance
+                                        best_progress_stress = progressStress
+                                        best_final_population = final_population
+                                        best_params = (popSize, eliteSize, mutationRate, generations, selection_method, crossover_method, mutation_method)
+
+
+    print(f"PopSize: {best_params[0]}")
+    print(f"EliteSize: {best_params[1]}")
+    print(f"MutationRate: {best_params[2]}")
+    print(f"Generations: {best_params[3]}")
+    print(f"Selection Method: {best_params[4]}")
+    print(f"Crossover Method: {best_params[5]}")
+    print(f"Mutation Method: {best_params[6]}")
+
+
+    if config.single_run_params["objectiveNrUsed"] == 1:
+        print(f"Final Distance: {best_overall_distance}")
+    elif config.single_run_params["objectiveNrUsed"] == 2:
+        print(f"Final Stress: {best_overall_stress}")
+    elif config.single_run_params["objectiveNrUsed"] == 3:
+        print(f"Final Combined Metric (Distance + Stress): {best_overall_metric}")
+
+
 
     if plotting_initialsolution_enabeld:
         plot_initial_solutions()
 
 if __name__ == "__main__":
     if tuning_mode:
-        run_experiements()
+        run_experiments()
     elif gurobi_enabled:
         optimal_route = gurobi_tsp(cityList)
     else:

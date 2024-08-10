@@ -143,26 +143,3 @@ def plotHypervolume2D(pareto_front, reference_point, title="Hypervolume in 2D Sp
 def plotArchiveRoutes(archive):
     for i, route in enumerate(archive):
         plotRoute(route, f"Archived Soulution {i + 1}")
-
-
-
-
-
-# def plotProgress(progress, ylabel, title):
-#     plt.plot(progress)
-#     plt.ylabel(ylabel)
-#     plt.xlabel('Generation')
-#     plt.title(title)
-#     plt.show()
-
-# def plotParameterImpact(parameter_name, parameter_values, progress_data, ylabel, title, filename_prefix):
-#     plt.figure()
-#     for i, param_value in enumerate(parameter_values):
-#         if len(progress_data[i]) > 0:
-#             plt.plot(progress_data[i], label=f'{parameter_name}={param_value}')
-#     plt.ylabel(ylabel)
-#     plt.xlabel('Generation')
-#     plt.title(title)
-#     plt.legend()
-#     plt.savefig(f"{filename_prefix}_{parameter_name}.png")
-#     plt.close()

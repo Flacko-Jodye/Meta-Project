@@ -76,7 +76,7 @@ def nextGeneration(currentGen, eliteSize, mutationRate, objectiveNrUsed, archive
         nextGeneration = mutatePopulationWithConfig(children, mutationRate, eliteSize, archiveSize)
     return nextGeneration
 
-def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations, seed = 44):
+def geneticAlgorithm(objectiveNrUsed, specialInitialSolutions, population, popSize, eliteSize, mutationRate, generations, archive_size = None,seed = 44):
     #create initial population
     pop = initialPopulation(popSize, population, specialInitialSolutions)
     
